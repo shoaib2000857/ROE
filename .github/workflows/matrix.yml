@@ -10,25 +10,20 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14, 16, 18]  # 3 variants minimum
+        version: [14, 16, 18]   # ✅ 3 variants → 3 parallel jobs
 
     steps:
       - name: matrix-32bbbfd
-        run: echo "Running build for Node version ${{ matrix.node-version }}"
+        run: echo "Building for version ${{ matrix.version }}"
 
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
       - name: Generate build artifact
-        run: echo "Build output for Node ${{ matrix.node-version }}" > build-${{ matrix.node-version }}.txt
+        run: echo "Build output for version ${{ matrix.version }}" > output-${{ matrix.version }}.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-32bbbfd-node-${{ matrix.node-version }}
-          path: build-${{ matrix.node-version }}.txt
+          name: build-32bbbfd-v${{ matrix.version }}
+          path: output-${{ matrix.version }}.txt
